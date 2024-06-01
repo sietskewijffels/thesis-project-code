@@ -1,5 +1,5 @@
 # Master Thesis Project
-This repository contains the code for the master thesis project "" by Sietske Wijffels.
+This repository contains the code for the master thesis project "Visual Anomaly Detection in Streaming Event Sequences" by Sietske Wijffels.
 
 ## Structure
 
