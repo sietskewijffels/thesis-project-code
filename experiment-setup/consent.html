@@ -1,0 +1,391 @@
+<!-- ?uuid=foo&part_id=1 -->
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>animated level 2</title>
+  <script>
+    // on POST, get all the POST form data and save it in a cookie 'session'
+    window.onload = function () {
+
+
+      // Dynamic resizer because blokjes zijn fucking groot
+     
+      if (window.innerHeight < 700) {
+        // find body tag and add style attribute
+        var body = document.getElementsByTagName("body")[0];
+        body.style.zoom = "0.8";
+      }
+
+      // get the query params and fetch part_id and uuid
+      var urlParams = new URLSearchParams(window.location.search);
+      var part_id = urlParams.get("part_id");
+      var uuid = urlParams.get("uuid");
+
+      if(!part_id) {
+        part_id = 1;
+      }
+
+      // set participant_number to part_id if it exists
+      if (part_id) {
+        document.getElementById("participant_number").value = part_id;
+        document.getElementById("participant_number_hidden").value = part_id;
+      }
+
+      document.getElementById("consentForm").onsubmit = function (e) {
+        e.preventDefault();
+        var formData = new FormData(e.target);
+        var data = {};
+        for (var [key, value] of formData.entries()) {
+          data[key] = value;
+        }
+
+        // Determine dataset sequence based on participant number
+        var ranges_dataset = {
+          participant_1: ["dataset1", "dataset2", "dataset3", "dataset4"],
+          participant_2: ["dataset1", "dataset2", "dataset4", "dataset3"],
+          participant_3: ["dataset1", "dataset3", "dataset2", "dataset4"],
+          participant_4: ["dataset1", "dataset3", "dataset4", "dataset2"],
+          participant_5: ["dataset1", "dataset4", "dataset2", "dataset3"],
+          participant_6: ["dataset1", "dataset4", "dataset3", "dataset2"],
+          participant_7: ["dataset2", "dataset1", "dataset3", "dataset4"],
+          participant_8: ["dataset2", "dataset1", "dataset4", "dataset3"],
+          participant_9: ["dataset2", "dataset3", "dataset1", "dataset4"],
+          participant_10: ["dataset2", "dataset3", "dataset4", "dataset1"],
+          participant_11: ["dataset2", "dataset4", "dataset1", "dataset3"],
+          participant_12: ["dataset2", "dataset4", "dataset3", "dataset1"],
+          participant_13: ["dataset3", "dataset1", "dataset2", "dataset4"],
+          participant_14: ["dataset3", "dataset1", "dataset4", "dataset2"],
+          participant_15: ["dataset3", "dataset2", "dataset1", "dataset4"],
+          participant_16: ["dataset3", "dataset2", "dataset4", "dataset1"],
+          participant_17: ["dataset3", "dataset4", "dataset1", "dataset2"],
+          participant_18: ["dataset3", "dataset4", "dataset2", "dataset1"],
+          participant_19: ["dataset4", "dataset1", "dataset2", "dataset3"],
+          participant_20: ["dataset4", "dataset1", "dataset3", "dataset2"],
+          participant_21: ["dataset4", "dataset2", "dataset1", "dataset3"],
+          participant_22: ["dataset4", "dataset2", "dataset3", "dataset1"],
+          participant_23: ["dataset4", "dataset3", "dataset1", "dataset2"],
+          participant_24: ["dataset4", "dataset3", "dataset2", "dataset1"],
+        };
+
+        // Determine version sequence based on participant number
+        var ranges = {
+          participant_1: ["version1", "version2", "version3", "version4"],
+          participant_2: ["version1", "version2", "version4", "version3"],
+          participant_3: ["version1", "version3", "version2", "version4"],
+          participant_4: ["version1", "version3", "version4", "version2"],
+          participant_5: ["version1", "version4", "version2", "version3"],
+          participant_6: ["version1", "version4", "version3", "version2"],
+          participant_7: ["version2", "version1", "version3", "version4"],
+          participant_8: ["version2", "version1", "version4", "version3"],
+          participant_9: ["version2", "version3", "version1", "version4"],
+          participant_10: ["version2", "version3", "version4", "version1"],
+          participant_11: ["version2", "version4", "version1", "version3"],
+          participant_12: ["version2", "version4", "version3", "version1"],
+          participant_13: ["version3", "version1", "version2", "version4"],
+          participant_14: ["version3", "version1", "version4", "version2"],
+          participant_15: ["version3", "version2", "version1", "version4"],
+          participant_16: ["version3", "version2", "version4", "version1"],
+          participant_17: ["version3", "version4", "version1", "version2"],
+          participant_18: ["version3", "version4", "version2", "version1"],
+          participant_19: ["version4", "version1", "version2", "version3"],
+          participant_20: ["version4", "version1", "version3", "version2"],
+          participant_21: ["version4", "version2", "version1", "version3"],
+          participant_22: ["version4", "version2", "version3", "version1"],
+          participant_23: ["version4", "version3", "version1", "version2"],
+          participant_24: ["version4", "version3", "version2", "version1"],
+        };
+
+        var participant_key =
+          "participant_" + (data["participant_number"] % 24);
+        if (participant_key === "participant_0") {
+          participant_key = "participant_24";
+        }
+        data["version_sequence"] = ranges[participant_key];
+        data["dataset_sequence"] = ranges_dataset[participant_key];
+        data["run_id"] = 1;
+
+        // if a uuid query param is in the URL, add it to the data
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("uuid")) {
+          data["uuid"] = urlParams.get("uuid");
+        }
+
+        document.cookie = "session=" + JSON.stringify(data) + "; path=/";
+        window.location.href = "algemene_uitleg.html";
+      };
+    };
+
+  </script>
+</head>
+
+<body class="bg-white">
+  <div class="w-full flex flex-row">
+    <!-- Settings Form Container-->
+    <div id="change-settings" class="w-1/3 mx-auto m-5 p-5 rounded border border-gray-300 shadow-lg bg-white">
+      <!-- Settings Form -->
+      <form method="POST" id="consentForm" action="?" class="flex flex-col space-y-2">
+        <h2 class="font-bold mb-2 text-xl">Welcome!</h2>
+        <h3 class="font-bold mb-2 text-lg">1. Introduction</h3>
+
+        <p>
+          You have been invited to take part in research project Visual
+          Anomaly Detection in Streaming Event Sequences, because you are
+          (former) student or researcher at TU/e.
+        </p>
+        <p>
+          Participation in this research project is voluntary: the decision to
+          take part is up to you. Before you decide to participate we would
+          like to ask you to read the following information, so that you know
+          what the research project is about, what we expect from you and how
+          we deal with processing your personal data. Based on this
+          information you can indicate via the consent declaration whether you
+          consent to take part in this research project and the processing of
+          your personal data.
+        </p>
+        <p>
+          You may of course always contact the Sietske Wijffels via
+          s.wijffels@student.tue.nl, if you have any questions, or you can
+          discuss this information with people you know.
+        </p>
+
+        <h3 class="font-bold mb-2 text-lg">
+          2. Purpose of the research / What will taking part in the research
+          project involve?
+        </h3>
+        <p>
+          This research project will be supervised by Stef van den Elzen en
+          Sanne van der Linden. The purpose of this study is to investigate
+          the effectiveness of different visualizations for detecting
+          anomalies in streaming event sequences. You will be asked to
+          complete a task that involves detecting anomalies in a series of
+          event sequences. Mouse clicks are tracked and saved and
+          corresponding data is used for data analysis. The session is
+          concluded with a small survey asking for general feedback. The study
+          will take approximately 30 minutes to complete.
+        </p>
+        <p>
+          This study will be completely anonymous, and the data obtained from
+          the study will not be traceable to you.
+        </p>
+
+        <h3 class="font-bold mb-2 text-lg">
+          3. Potential risks and inconveniences
+        </h3>
+        <p>
+          Your participation in this research project does not involve any
+          physical, legal or economic risks. You do not have to answer
+          questions which you do not wish to answer. Your participation is
+          voluntary. This means that you may end your participation at any
+          moment you choose by letting the researcher know this. You do not
+          have to explain why you decided to end your participation in the
+          research project. Ending your participation will have no
+          disadvantageous consequences for you.
+        </p>
+
+        <p>
+          If you decide to end your participation during the research, the
+          data which you already provided up to the moment of withdrawal of
+          your consent will be used in the research. Do you wish to end the
+          research, or do you have any questions and/or complaints? Then
+          please contact Sietske Wijffels via s.wijffels@student.tue.nl.
+        </p>
+
+        <h3 class="font-bold mb-2 text-lg">
+          4. Confidentiality and data processing
+        </h3>
+
+        <p>
+          The raw and processed research data will be retained for a period of
+          5 years. Ultimately after expiration of this time period the data
+          will be either deleted or anonymized so that it can no longer be
+          connected to an individual person. The research data will, if
+          necessary (e.g. for a check on scientific integrity) and only in
+          anonymous form be made available to persons outside the research
+          group. Your anonimyzed data can be made available for future
+          research, for example by sharing those data with fellow researchers
+          or making anonymized/pseudonymized data available via a data archive
+          or repository.
+        </p>
+
+        <p>
+          This research project was assessed on 17th of April 2023 by the
+          ethical review committee of TU/e.
+        </p>
+
+        <div class="my-5 py-5">
+          <hr />
+        </div>
+        <h2 class="font-bold mb-2 text-xl">Consent</h2>
+        <p>By signing this consent form I acknowledge the following:</p>
+        <ul>
+          <li>
+            1. I am sufficiently informed about the research project through a
+            separate information sheet. I have read the information sheet and
+            have had the opportunity to ask questions. These questions have
+            been answered satisfactorily.
+          </li>
+          <li>
+            2. I take part in this research project voluntarily. There is no
+            explicit or implicit pressure for me to take part in this research
+            project. It is clear to me that I can end participation in this
+            research project at any moment, without giving any reason. I do
+            not have to answer a question if I do not wish to do so.
+          </li>
+        </ul>
+
+        <div class="flex flex-row items-center space-x-5">
+          <input type="checkbox" id="consent" name="consent" required />
+          <label for="consent">I agree to participate in the study and allow entered data in
+            this application to be used for above purposes.</label>
+        </div>
+
+        <div class="my-5 py-5">
+          <hr />
+        </div>
+
+        <h2 class="font-bold mb-2 text-xl">Important!</h2>
+
+        <p>
+          People younger then 18 years old are not
+          allowed to participate in this study. This study heavily relies on color recognition and distinguishablity. If
+          you are <b>colorblind</b>, you
+          are <b>not allowed to participate</b> in this study and friendly thanked and asked to leave this page.
+        </p>
+
+        <p>
+          Reaction time and accuracy are measured, <b>do not leave or refresh the website</b> during the study. It is
+          important that you complete the study without any interruptions or distractions.
+        </p>
+
+        <p>
+          Use a <b>moderns laptop or desktop </b> with a screen resolution of at least 1920x1080 pixels. The study is not
+          optimized for mobile devices. It is important that you <b>use a mouse</b> to interact with interface, <b>do
+            not use a trackpad</b>.
+        </p>
+
+        <div class="my-5 py-5">
+          <hr />
+        </div>
+
+        <h2 class="font-bold mb-2 text-xl">Demographics</h2>
+
+        <label for="participant_number">Participant number:</label>
+        <input type="hidden" name="participant_number" id="participant_number_hidden" value="" />
+        <input type="number" step="1" id="participant_number" name="participant_number" class="bg-gray-100" disabled />
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+
+        <label for="age">Age:</label>
+        <select id="age" name="age">
+          <option value="18-20">18-20</option>
+          <option value="21-25">21-25</option>
+          <option value="26-30">26-30</option>
+          <option value="31-35">31-35</option>
+          <option value="36-40">36-40</option>
+          <option value="41-45">41-45</option>
+          <option value="46-50">46-50</option>
+          <option value="51-55">51-55</option>
+          <option value="56-60">56-60</option>
+          <option value="61-65">61-65</option>
+          <option value="65+">65+</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+
+        <label for="education">Highest completed education:</label>
+        <select id="education" name="education">
+          <option value="Primary school">Primary school</option>
+          <option value="High school">High school</option>
+          <option value="Secondary vocational education (MBO in Dutch)">
+            Secondary vocational education (MBO in Dutch)
+          </option>
+          <option value="Applied university (HBO in Dutch)/ University bachelor">
+            Applied university (HBO in Dutch)/ University bachelor
+          </option>
+          <option value="University master">University master</option>
+          <option value="Doctorate or equivalent">
+            Doctorate or equivalent
+          </option>
+          <option value="Other">Other</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <label for="experience">Experience with data visualizations:</label>
+        <select id="experience" name="experience">
+          <option value="None">None</option>
+          <option value="Heard of it">Heard of it</option>
+          <option value="Somewhat">Somewhat</option>
+          <option value="Used it several times">Used it several times</option>
+          <option value="Used it many times">Used it many times</option>
+          <option value="Prefer not to say">Prefer not to say</option>
+        </select>
+
+        <!-- number of sequences input -->
+        <!-- <input
+              type="hidden"
+              id="amountOfSequences"
+              name="amountOfSequences"
+              value="20"
+            /> -->
+
+        <!-- Sequence length -->
+        <!-- <input
+              type="hidden"
+              id="rightwindowLength"
+              name="rightwindowLength"
+              value="20"
+            /> -->
+
+        <!-- Left Window Length -->
+        <!-- <input
+              id="leftwindowLength"
+              name="leftwindowLength"
+              value="40"
+              type="hidden"
+            /> -->
+
+        <!-- Max Tick update in seconds -->
+        <!-- <input
+              id="maxUpdateTickSeconds"
+              name="maxUpdateTickSeconds"
+              type="hidden"
+              value="1.5"
+            /> -->
+
+        <!-- <input
+            id="selectedDataset"
+            name="selectedDataset"
+            type="hidden"
+            value="pilot_mixed_binned"
+          /> -->
+
+        <!-- <input
+              id="visualizeAnomalies"
+              name="visualizeAnomalies"
+              type="hidden"
+              value="false"
+            /> -->
+
+        <div class="my-5 py-5">
+          <hr />
+        </div>
+        <button type="submit" value="Submit" class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>

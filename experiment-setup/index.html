@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>animated level 2</title>
+    <script>
+      // Delete cookie 'session' (if it exists) and redirect to consent.html
+      document.cookie =
+        "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      // if the uuid query param is set, include it in the redirect
+      window.location.href = "consent.html" + (location.search || "");
+    </script>
+  </head>
+
+  <body class="bg-white">
+    Redirecting...
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <script>
+      // override the console.log function to save all logs to a variable and make a function to download it to a text file (downloadLog)
+      var oldLog = console.log;
+      var log = [];
+      console.log = function () {
+        oldLog.apply(console, arguments);
+        log.push(Array.from(arguments));
+      };
+
+      function downloadLog() {
+        var element = document.createElement("a");
+        element.setAttribute(
+          "href",
+          "data:text/plain;charset=utf-8," +
+            encodeURIComponent(log.map((x) => JSON.stringify(x)).join("\n"))
+        );
+        let nameFromQueryParam = new URLSearchParams(
+          window.location.search
+        ).get("name");
+        element.setAttribute("download", "log_" + nameFromQueryParam + ".txt");
+
+        element.style.display = "none";
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+      }
+      // on load, get the cookie 'session' and unpack 'name' and 'run_id' from the JSON
+      window.onload = function () {
+        if (window.innerHeight < 700) {
+        // find body tag and add style attribute
+        var body = document.getElementsByTagName("body")[0];
+        body.style.zoom = "0.8";
+      }
+        var cookie = document.cookie;
+        var session = JSON.parse(cookie.split("=")[1]);
+        document.getElementById("name").innerHTML =
+          "participant #" + session.participant_number;
+        document.getElementById("run_id").innerHTML = session.run_id;
+        var version = session.version_sequence[session.run_id - 1];
+        var nextVersion = session.version_sequence[session.run_id];
+        var nextDataset = session.dataset_sequence[session.run_id];
+        var maxwclass = "1400px";
+        switch (version) {
+          case "version1":
+          case "version3":
+            maxwclass = "1730px";
+            break;
+          case "version2":
+          case "version4":
+            maxwclass = "1730px";
+            break;
+        }
+        document.getElementById("experimentParent").style.maxWidth = maxwclass;
+        // set the form action to the current URL with version as a query parameter
+        document.getElementById("nextRunForm").action =
+          "/uitleg.html?version=" + nextVersion + "&dataset=" + nextDataset;
+        // OnClick of nextRun button, save the log to the cookie 'session' JSON and redirect to the next version
+
+        document.getElementById("nextRun").onclick = function () {
+          var cookie = document.cookie;
+          var session = JSON.parse(cookie.split("=")[1]);
+          var version = session.version_sequence[session.run_id - 1];
+          var nextRunAvailable =
+            session.version_sequence.length > session.run_id;
+          sessionStorage.setItem("log_" + version, JSON.stringify(log));
+          if (!nextRunAvailable) {
+            document.cookie = "session=" + JSON.stringify(session) + "; path=/";
+            window.location.href = "end.html";
+          } else {
+            session.run_id += 1;
+            sessionStorage.setItem("cookie_data", JSON.stringify(session));
+            document.cookie = "session=" + JSON.stringify(session) + "; path=/";
+            window.location.href =
+              document.getElementById("nextRunForm").action;
+          }
+        };
+      };
+    </script>
+    <title>animated level 2</title>
+  </head>
+
+  <body class="bg-white" oncontextmenu="return false;">
+    <div class="w-full mx-auto flex flex-col" id="experimentParent">
+      <div class="my-5 py-5">
+        <h1 class="text-lg font-bold">
+          Experiment session <span id="name"></span> - run
+          <span id="run_id"></span>
+        </h1>
+      </div>
+      <!-- Sequence Container -->
+      <div id="block-sequences"></div>
+
+      <!-- Settings Form Container-->
+      <div
+        id="change-settings"
+        class="m-5 p-5 rounded border border-gray-300 shadow-lg bg-white max-w-xl w-full mx-auto hidden"
+      >
+        <!-- Settings Form -->
+        <form
+          method="GET"
+          id="nextRunForm"
+          action=""
+          class="flex flex-col space-y-2"
+        >
+          <button
+            type="button"
+            id="nextRun"
+            class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white"
+          >
+            Finish run
+          </button>
+
+          <!-- Print log -->
+          <!-- <button type="button" id="printLog" onclick="downloadLog()"
+          class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white">
+          Print Log
+        </button> -->
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="d3_animated_level_2.js"></script>
+  </body>
+</html>

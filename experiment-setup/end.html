@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>animated level 2</title>
+    <script>
+      // on POST, get all the POST form data and save it in a cookie 'session'
+      window.onload = function () {
+        if (window.innerHeight < 700) {
+          // find body tag and add style attribute
+          var body = document.getElementsByTagName("body")[0];
+          body.style.zoom = "0.8";
+        }
+      };
+
+      function downloadLog() {
+        var cookie = document.cookie;
+        var cookieSession = JSON.parse(cookie.split("=")[1]);
+
+        var surveyData = new FormData(document.getElementById("consentForm"));
+
+        var log = {
+          metadata: cookieSession,
+          log_version1: JSON.parse(sessionStorage.getItem("log_version1")),
+          log_version2: JSON.parse(sessionStorage.getItem("log_version2")),
+          log_version3: JSON.parse(sessionStorage.getItem("log_version3")),
+          log_version4: JSON.parse(sessionStorage.getItem("log_version4")),
+          survey: Object.fromEntries(surveyData),
+        };
+
+        var uuid = cookieSession.uuid;
+
+        // Post the log to the server
+        // var xhr = new XMLHttpRequest();
+        // xhr.open(
+        //   "POST",
+        //   //"https://wijffels-mtp.ddev.local/api/results/" + uuid,
+        //   "https://wijffels-mtp.rozen.cloud/api/results/" + uuid,
+        //   true
+        // );
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // xhr.send(JSON.stringify({ results: log }));
+
+        // Check if the post was successful
+        // xhr.onreadystatechange = function () {
+        //   if (xhr.readyState === 4) {
+        //     if (xhr.status === 200) {
+        //       window.location.href = "thanks.html";
+        //     } else {
+        //       alert("The results could not be saved. Please try again.");
+        //     }
+        //   }
+        // };
+
+        window.location.href = "thanks.html";
+      }
+    </script>
+  </head>
+
+  <body class="bg-white">
+    <div class="w-full flex flex-row">
+      <!-- Settings Form Container-->
+      <div
+        id="change-settings"
+        class="w-1/2 mx-auto m-5 p-5 rounded border border-gray-300 shadow-lg bg-white"
+      >
+        <!-- Settings Form -->
+        <form
+          method="POST"
+          id="consentForm"
+          action="?"
+          class="flex flex-col space-y-5"
+        >
+          <h2 class="font-bold mb-2 text-xl">Short survey</h2>
+
+          <p>You have completed all the visualization tasks, well done!</p>
+
+          <div id="questions" class="flex flex-col space-y-5">
+            <p>
+              To get a general idea of your experience, please fill in the
+              following short questionnaire:
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <!-- Anomaly Detection Task Difficulty -->
+            <label for="anomaly_difficulty" class="mb-1"
+              >How difficult was it to find anomalies in the sequences for all
+              visualizations in general?</label
+            >
+            <div class="flex flex-wrap mx-auto">
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="anomaly_difficulty"
+                  value="1"
+                  required
+                />
+                <label>very difficult</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="2" />
+                <label>difficult</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="2" />
+                <label>somewhat<br />difficult</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="3" />
+                <label>moderate</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="4" />
+                <label>somewhat<br />easy</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="5" />
+                <label>easy</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="anomaly_difficulty" value="6" />
+                <label>very easy</label>
+              </div>
+            </div>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <!-- Recommendation Algorithm Effectiveness -->
+            <label for="automatic_detection_helpful" class="mb-1"
+              >Did the automatic detection (red block borders) help you in
+              determining which blocks were anomalies?</label
+            >
+            <div class="flex flex-wrap mx-auto">
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="1"
+                  required
+                />
+                <label>very unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="2"
+                />
+                <label>unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="3"
+                />
+                <label>somewhat<br />unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="4"
+                />
+                <label>moderate</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="5"
+                />
+                <label>somewhat<br />helpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="6"
+                />
+                <label>helpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input
+                  type="radio"
+                  name="automatic_detection_helpful"
+                  value="7"
+                />
+                <label>very helpful</label>
+              </div>
+            </div>
+
+            <!-- Explanation for Recommendation Algorithm -->
+            <label for="automatic_detection_helpful_explanation" class="mb-1"
+              >Explain your answer:</label
+            >
+            <textarea
+              id="automatic_detection_helpful_explanation"
+              name="automatic_detection_helpful_explanation"
+              required
+              rows="3"
+              class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            ></textarea>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <!-- Recommendation Algorithm Effectiveness -->
+            <label for="history_helpful" class="mb-1"
+              >Did the history (aggregated and compressed view) help you in
+              determining which blocks were anomalies?</label
+            >
+            <div class="flex flex-wrap mx-auto">
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="1" required />
+                <label>very unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="2" />
+                <label>unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="3" />
+                <label>somewhat<br />unhelpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="4" />
+                <label>moderate</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="5" />
+                <label>somewhat<br />helpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="6" />
+                <label>helpful</label>
+              </div>
+              <div class="flex flex-col items-center mr-12 mb-12">
+                <input type="radio" name="history_helpful" value="7" />
+                <label>very helpful</label>
+              </div>
+            </div>
+
+            <!-- Explanation for Recommendation Algorithm -->
+            <label for="history_helpful_explanation" class="mb-1"
+              >Explain your answer:</label
+            >
+            <textarea
+              id="history_helpful_explanation"
+              name="history_helpful_explanation"
+              required
+              rows="3"
+              class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            ></textarea>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <!-- Ranking Visualizations on Preference -->
+            <label class="mb-1">
+              Rank the visualizations on difficulty from most difficult (1) to
+              least difficult (4):
+            </label>
+            <div class="flex flex-col space-y-1">
+              <label for="difficult_v1">Sliding window view</label>
+              <select
+                id="difficult_v1"
+                name="difficult_v1"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="difficult_v2"
+                >Sliding window view + automatic detection</label
+              >
+              <select
+                id="difficult_v2"
+                name="difficult_v2"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="difficult_v3"
+                >History view (aggregation and compression)</label
+              >
+              <select
+                id="difficult_v3"
+                name="difficult_v3"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="difficult_v4"
+                >History view (aggregation and compression) + automatic
+                detection</label
+              >
+              <select
+                id="difficult_v4"
+                name="difficult_v4"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+
+            <p><i>check if you selected all numbers 1 to 4</i></p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <label class="mb-1">
+              Rank the visualizations on preference from most preferred (1) to
+              least preferred (4):
+            </label>
+            <div class="flex flex-col space-y-1">
+              <label for="preference_v1">Sliding window view</label>
+              <select
+                id="preference_v1"
+                name="preference_v1"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="preference_v2"
+                >Sliding window view + automatic detection</label
+              >
+              <select
+                id="preference_v2"
+                name="preference_v2"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="preference_v3"
+                >History view (aggregation and compression)</label
+              >
+              <select
+                id="preference_v3"
+                name="preference_v3"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="preference_v4"
+                >History view (aggregation and compression) + automatic
+                detection</label
+              >
+              <select
+                id="preference_v4"
+                name="preference_v4"
+                required
+                class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+
+            <p><i>check if you selected all numbers 1 to 4</i></p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <!-- Other Feedback -->
+            <label for="issues_or_interruptions" class="mb-1"
+              >Did you have (technical) issues or interruptions during the
+              experiment?</label
+            >
+            <textarea
+              id="issues_or_interruptions"
+              name="issues_or_interruptions"
+              required
+              rows="3"
+              class="rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <!-- Print log -->
+          <button
+            type="button"
+            id="printLog"
+            onclick="downloadLog()"
+            class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white"
+          >
+            Save results for submission
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>animated level 2</title>
+  <script>
+    // on load, get the cookie 'session' and display its contents in the span with id 'cookie'
+    window.onload = function () {
+
+      if (window.innerHeight < 700) {
+        // find body tag and add style attribute
+        var body = document.getElementsByTagName("body")[0];
+        body.style.zoom = "0.8";
+      }
+      var cookie = document.cookie;
+
+      // if cookie is empty, redirect to index.html
+      if (cookie === "") {
+        window.location.href = "index.html";
+      }
+      document.getElementById("cookie").innerHTML =
+        cookie ?? "No cookie found";
+
+      var session = JSON.parse(cookie.split("=")[1]);
+      document.getElementById("version").value = session.version_sequence[0];
+      document.getElementById("dataset").value = session.dataset_sequence[0];
+    };
+  </script>
+</head>
+
+<body class="bg-white">
+  <div class="w-full flex flex-col">
+    <!-- Settings Form Container-->
+    <div class="w-1/2 mx-auto flex flex-col">
+      <div id="change-settings" class="rounded border border-gray-300 shadow-lg bg-white m-5 p-5">
+        <!-- Settings Form -->
+        <form method="GET" action="uitleg.html" class="flex flex-col space-y-2">
+          <input type="hidden" name="version" value="" id="version" />
+          <input type="hidden" name="dataset" value="" id="dataset" />
+          <h2 class="font-bold mb-2 text-xl">Instructions</h2>
+
+          <p>
+            You are asked to detect anomalies in streaming event sequence data in four different visualization
+            implementations. The order in which you will evaluate these implementations is randomized. A general
+            explanation of the task is given below but will be made more specific based on the visualization
+            implementation.
+            After you have read and understood these instructions, you can continue to the explanation of the first
+            session by clicking the button below.
+          </p>
+
+          <h4 class="font-bold mt-5 mb-2 text-lg">Event sequences</h4>
+
+          <p>
+            The data that you are going to evaluate is visualized as colored blocks (events) that are organized in a
+            sequence.
+            The order of these colored blocks follows an easily recognizable repetitive pattern that is specific to that
+            sequence but can change over time.
+            Three different types of patterns are present in the event sequences:
+          </p>
+
+          <p>
+            <i>Short pattern of 2 blocks:</i>
+          </p>
+          <img src="images/short.png" alt="Short_pattern" class="w" />
+
+          <p>
+            <i>Long pattern of 15 blocks:</i>
+          </p>
+          <img src="images/long.png" alt="Long_pattern" class="w" />
+
+          <p>
+            <i>Changing pattern of 2 blocks:</i>
+          </p>
+          <img src="images/change.png" alt="Changing_pattern" class="w" />
+
+          <p>
+            A changing pattern will always be a short pattern of 2 blocks followed by a different short pattern of 2
+            blocks.
+          </p>
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+          <h4 class="font-bold mt-5 mb-2 text-lg">Anomalies</h4>
+
+          <p>
+            Anomalies (deviations or 'afwijkingen' in Dutch) are present in almost all streaming sequences that you will
+            evaluate.
+            It is your task to detect these anomalies by clicking on the anomalous block.
+          </p>
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <p>
+            <i>Anomalies are single events that deviate in color from the contextual repetitive pattern.</i>
+          </p>
+          <p>
+            <i>Anomalous blocks replace the expected colored blocks in the sequence.</i>
+          </p>
+
+          <p>
+            <i>In case a pattern is changing, the first new block of a changing pattern is <b>not</b> considered an
+              anomaly.</i>
+          </p>
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <p>
+            Examples of anomalies are given below:
+          </p>
+          <p>
+            <i>Short pattern anomaly:</i>
+          </p>
+          <img src="images/short_anomaly.png" alt="Short_pattern_anomaly" class="w" />
+
+          <p>
+            <i>Long pattern anomaly:</i>
+          </p>
+          <img src="images/long_anomaly.png" alt="Long_pattern_anomaly" class="w" />
+
+          <p>
+            <i>Changing pattern anomaly:</i>
+          </p>
+          <img src="images/change_anomaly.png" alt="Changing_pattern_anomaly" class="w" />
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <h4 class="font-bold mt-5 mb-2 text-lg">Basic setup</h4>
+
+          <p>
+            12 sequences of streaming data are shown stacked on each other at the same time. Every row represents a
+            single sequence.
+            The events (colored blocks) will stream into the screen from the right side of the screen to the
+            left side of the screen and follow one of the patterns described above.
+            The white spaces represent data gaps in time, they are not part of the pattern but are
+            just small delays between the occurrence of events. You are monitoring the streaming data simultaneously
+            and are asked to detect anomalies in the sequences by clicking on the anomalies. The events that are shown
+            on the screen at the start of the session do not contain any anomalies.
+          </p>
+
+          <img src="images/full_screen.png" alt="Full_screen" class="w" />
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <h4 class="font-bold mt-5 mb-2 text-lg">Interactions</h4>
+
+          <p>
+            If you left-click on a block, the block will get a blue border indicating that you have selected it as an
+            anomaly.
+          </p>
+
+          <img src="images/general_instruction_left_click.png" alt="general_instruction_left_click" class="w" />
+
+          <p>
+            If you right-click on a selected anomaly, the border of the block will be removed indicating that you have
+            de-selected it as an anomaly. This could be useful if you have selected a block by accident or if you
+            changed your decision.
+          </p>
+
+          <img src="images/general_instruction_right_click.png" alt="general_instruction_right_click" class="w" />
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+
+          <h3 class="font-bold mt-5 mb-2 text-lg">Summary</h3>
+
+          <p>
+            Click on the blocks that deviate in color or from the contextual repetitive pattern for that sequence
+            (row).
+            Whether you consider an event anomalous only depends on the pattern of the corresponding sequences (row).
+            The first block of a changing pattern is <b>not</b> considered an anomaly.
+          </p>
+
+          <p>
+            You will get more information about your first session after you click on the button below.
+          </p>
+
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+          <button type="submit" value="Submit" class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white">
+            Start first session
+          </button>
+        </form>
+      </div>
+      <div class="my-5 p-5">
+        <!-- gray text the cookie contents of cookie 'session' -->
+        <p class="text-gray-300 break-all monospace">
+          <!-- cookie contents of cookie 'session' -->
+          Cookie:
+        <div class="w-full break-all text-gray-300" id="cookie"></div>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

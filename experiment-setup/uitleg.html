@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>animated level 2</title>
+  <script>
+    // on load, get the cookie 'session' and display its contents in the span with id 'cookie'
+    window.onload = function () {
+
+      if (window.innerHeight < 700) {
+        // find body tag and add style attribute
+        var body = document.getElementsByTagName("body")[0];
+        body.style.zoom = "0.8";
+      }
+      var cookie = document.cookie;
+
+      // if cookie is empty, redirect to index.html
+      if (cookie === "") {
+        window.location.href = "index.html";
+      }
+      document.getElementById("cookie").innerHTML =
+        cookie ?? "No cookie found";
+
+      var session = JSON.parse(cookie.split("=")[1]);
+      document.getElementById("version").value =
+        session.version_sequence[session.run_id - 1];
+      document.getElementById("dataset").value =
+        session.dataset_sequence[session.run_id - 1];
+      document.getElementById("runId").innerHTML = session.run_id;
+      // Unhide the explanation for the current version
+      document
+        .getElementById(
+          "uitleg" + session.version_sequence[session.run_id - 1]
+        )
+        .classList.remove("hidden");
+    };
+  </script>
+</head>
+
+<body class="bg-white">
+  <div class="w-full flex flex-col">
+    <!-- Settings Form Container-->
+    <div class="w-1/2 mx-auto flex flex-col">
+      <div id="change-settings" class="rounded border border-gray-300 shadow-lg bg-white m-5 p-5">
+        <!-- Settings Form -->
+        <form method="GET" action="animated_level_2.html" class="flex flex-col space-y-2">
+          <input type="hidden" name="version" value="" id="version" />
+          <input type="hidden" name="dataset" value="" id="dataset" />
+          <h2 class="font-bold mb-2 text-xl">
+            Explanation for run <span id="runId"></span>
+          </h2>
+
+          <!-- uitlegversion2 -->
+          <div id="uitlegversion1" class="hidden">
+            <p>
+              In this session, the sequences are visualized using a sliding
+              window. New events (colored blocks) enter on the right side of
+              the screen and vanish on the left side of the screen.
+            </p>
+
+            <img src="images/version_1.png" alt="version_1" class="w mx-auto" />
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Interactions</h4>
+
+            <p>
+              If you left-click on a block, the block will get a blue border indicating that you have selected it as an
+              anomaly.
+            </p>
+
+            <img src="images/general_instruction_left_click.png" alt="general_instruction_left_click" class="w" />
+
+            <p>
+              If you right-click on a selected anomaly, the border of the block will be removed indicating that you have
+              de-selected it as an anomaly. This could be useful if you have selected a block by accident or if you
+              changed your decision.
+            </p>
+
+            <img src="images/general_instruction_right_click.png" alt="general_instruction_right_click" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomalies</h4>
+
+            <p>
+              Anomalies (deviations or 'afwijkingen' in Dutch) are present in almost all streaming sequences that you will
+              evaluate.
+              It is your task to detect these anomalies by clicking on the anomalous block.
+            </p>
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              <i>Anomalies are single events that deviate in color from the contextual repetitive pattern.</i>
+            </p>
+            <p>
+              <i>Anomalous blocks replace the expected colored blocks in the sequence.</i>
+            </p>
+
+            <p>
+              <i>In case a pattern is changing, the first new block of a changing pattern is <b>not</b> considered an
+                anomaly.</i>
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              Examples of anomalies are given below:
+            </p>
+            <p>
+              <i>Short pattern anomaly:</i>
+            </p>
+            <img src="images/short_anomaly.png" alt="Short_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Long pattern anomaly:</i>
+            </p>
+            <img src="images/long_anomaly.png" alt="Long_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Changing pattern anomaly:</i>
+            </p>
+            <img src="images/change_anomaly.png" alt="Changing_pattern_anomaly" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h3 class="font-bold mt-5 mb-2 text-lg">Summary</h3>
+
+            <p>
+              Click on the blocks that deviate in color or from the contextual repetitive pattern for that sequence
+              (row).
+              Whether you consider an event anomalous only depends on the pattern of the corresponding sequences
+              (row).
+              The first block of a changing pattern is <b>not</b> considered an anomaly.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              This session will take 3 minutes and your task is to detect
+              anomalies as <b>quickly</b> and <b>accurately</b> as possible.
+            </p>
+
+            <p>
+              The session will start when you click the button below. Good
+              luck!
+            </p>
+          </div>
+
+          <!-- uitlegversion2 -->
+
+          <div id="uitlegversion2" class="hidden">
+            <p>
+              In this session, the sequences are visualized using a
+              compression and aggregation method. New events (colored blocks)
+              enter on the right side of the screen and are compressed and,
+              subsequently, aggregated once they get older.
+            </p>
+
+            <img src="images/version_2.png" alt="version_2" class="w mx-auto" />
+
+            <p>
+              In the compressed view, events are still shown in the same order
+              as they entered the screen, but the width is reduced. The
+              aggregation view shows a distribution of all the events that are
+              older than the ones shown on in compressed and normal view. The separate colors
+              indicate the percentage of events of a specific type with
+              respect to the total number of events that are older than the
+              events shown in compressed and normal view.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Interactions</h4>
+
+            <p>
+              If you left-click on a block, the block will get a blue border indicating that you have selected it as an
+              anomaly.
+            </p>
+
+            <img src="images/version_2_instruction_left_click.png" alt="version_2_instruction_left_click" class="w" />
+
+            <p>
+              If you right-click on a selected anomaly, the border of the block will be removed indicating that you have
+              de-selected it as an anomaly. This could be useful if you have selected a block by accident or if you
+              changed your decision.
+            </p>
+
+            <img src="images/version_2_instruction_right_click.png" alt="version_2_instruction_right_click" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomalies</h4>
+
+            <p>
+              Anomalies (deviations or 'afwijkingen' in Dutch) are present in almost all streaming sequences that you will
+              evaluate.
+              It is your task to detect these anomalies by clicking on the anomalous block.
+            </p>
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              <i>Anomalies are single events that deviate in color from the contextual repetitive pattern.</i>
+            </p>
+            <p>
+              <i>Anomalous blocks replace the expected colored blocks in the sequence.</i>
+            </p>
+
+            <p>
+              <i>In case a pattern is changing, the first new block of a changing pattern is <b>not</b> considered an
+                anomaly.</i>
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              Examples of anomalies are given below:
+            </p>
+            <p>
+              <i>Short pattern anomaly:</i>
+            </p>
+            <img src="images/short_anomaly.png" alt="Short_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Long pattern anomaly:</i>
+            </p>
+            <img src="images/long_anomaly.png" alt="Long_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Changing pattern anomaly:</i>
+            </p>
+            <img src="images/change_anomaly.png" alt="Changing_pattern_anomaly" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h3 class="font-bold mt-5 mb-2 text-lg">Summary</h3>
+
+            <p>
+              Click on the blocks that deviate in color or from the contextual repetitive pattern for that sequence
+              (row).
+              Whether you consider an event anomalous only depends on the pattern of the corresponding sequences
+              (row).
+              The first block of a changing pattern is <b>not</b> considered an anomaly.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              This session will take 3 minutes and your task is to detect
+              anomalies as <b>quickly</b> and <b>accurately</b> as possible.
+            </p>
+
+            <p>
+              The session will start when you click the button below. Good
+              luck!
+            </p>
+          </div>
+
+          <!-- uitlegversion3 -->
+
+          <div id="uitlegversion3" class="hidden">
+            <p>
+              In this session, the sequences are visualized using a sliding
+              window and recommendation. New events (colored blocks) enter on
+              the right side of the screen and vanish on the left side of the
+              screen.
+            </p>
+
+            <img src="images/version_3.png" alt="version_3" class="w mx-auto" />
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Interactions</h4>
+
+            <p>
+              If you left-click on a block, the block will get a blue border indicating that you have selected it as an
+              anomaly.
+            </p>
+
+            <img src="images/general_instruction_left_click.png" alt="general_instruction_left_click" class="w" />
+
+            <p>
+              If you right-click on a selected anomaly, the border of the block will be removed indicating that you have
+              de-selected it as an anomaly. This could be useful if you have selected a block by accident or if you
+              changed your decision.
+            </p>
+
+            <img src="images/general_instruction_right_click.png" alt="general_instruction_right_click" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomaly Detection</h4>
+
+
+            <p>
+              An anomaly detector highlights potential anomalies by coloring
+              the border of the event red. This algorithm is not perfect and
+              can miss specific anomalies or misjudge and label normal events
+              as anomalies. Be aware that you keep an eye on the unmarked events as well to detect anomalies.
+            </p>
+
+            <p>
+              Your interaction with the visualization will influence the
+              sensitivity of the algorithm per sequence.
+            </p>
+
+            <img src="images/version_3_anomaly_detector.png" alt="version_3_anomaly_detector" class="w mx-auto" />
+
+            <p>
+            <p>
+              You can agree with the algorithm and left-click on the
+              highlighted event to confirm the detection of an anomaly. The border color will change to blue.
+            </p>
+            </p>
+
+            <img src="images/version_3_detector_agree_red.png" alt="version_3_detector_agree_red" class="w mx-auto" />
+
+            <img src="images/version_3_detector_agree_blue.png" alt="version_3_detector_agree_blue" class="w mx-auto" />
+
+            <p>
+              You can disagree with the algorithm and right-click the
+              highlighted event to un-mark the event, it is not registered as
+              an anomaly.
+            </p>
+
+            <img src="images/version_3_detector_disagree_red.png" alt="version_3_detector_disagree_red"
+              class="w mx-auto" />
+
+            <img src="images/version_3_detector_disagree_no_border.png" alt="version_3_detector_disagree_no_border"
+              class="w mx-auto" />
+
+            <p>
+              It is important that you interact (agree/disagree) with the visualization to adjust the sensitivity of the
+              algorithm. If you do not interact with a
+              highlighted event, and it leaves the screen with a red border, the event is considered a normal event and
+              not flagged anomalous.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomalies</h4>
+
+            <p>
+              Anomalies (deviations or 'afwijkingen' in Dutch) are present in almost all streaming sequences that you will
+              evaluate.
+              It is your task to detect these anomalies by clicking on the anomalous block.
+            </p>
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              <i>Anomalies are single events that deviate in color from the contextual repetitive pattern.</i>
+            </p>
+            <p>
+              <i>Anomalous blocks replace the expected colored blocks in the sequence.</i>
+            </p>
+
+            <p>
+              <i>In case a pattern is changing, the first new block of a changing pattern is <b>not</b> considered an
+                anomaly.</i>
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              Examples of anomalies are given below:
+            </p>
+            <p>
+              <i>Short pattern anomaly:</i>
+            </p>
+            <img src="images/short_anomaly.png" alt="Short_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Long pattern anomaly:</i>
+            </p>
+            <img src="images/long_anomaly.png" alt="Long_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Changing pattern anomaly:</i>
+            </p>
+            <img src="images/change_anomaly.png" alt="Changing_pattern_anomaly" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h3 class="font-bold mt-5 mb-2 text-lg">Summary</h3>
+
+            <p>
+              Click on the blocks that deviate in color or from the contextual repetitive pattern for that sequence
+              (row).
+              Whether you consider an event anomalous only depends on the pattern of the corresponding sequences
+              (row).
+              The first block of a changing pattern is <b>not</b> considered an anomaly.
+            </p>
+
+            <p>
+              Interact with the visualization to adjust the sensitivity of the algorithm. This algorithm is not perfect
+              and
+              can miss specific anomalies or misjudge and label normal events as anomalies. Be aware that you keep an
+              eye on the unmarked events as well to detect anomalies.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              This session will take 3 minutes and your task is to detect
+              anomalies as <b>quickly</b> and <b>accurately</b> as possible.
+            </p>
+
+            <p>
+              The session will start when you click the button below. Good
+              luck!
+            </p>
+          </div>
+
+          <!-- uitlegversion4 -->
+
+          <div id="uitlegversion4" class="hidden">
+            <p>
+              In this session, the sequences are visualized using a
+              compression and aggregation method in combination with a
+              recommendation. New events (colored blocks) enter on the right
+              side of the screen and are compressed and, subsequently,
+              aggregated once they get older.
+            </p>
+
+            <img src="images/version_4.png" alt="version_4" class="w mx-auto" />
+            <p>
+              In the compressed view, events are still shown in the same order
+              as they entered the screen, but the width is reduced. The
+              aggregation view shows a distribution of all the events that are
+              older than the ones shown on the screen. The separate colors
+              indicate the percentage of events of a specific type with
+              respect to the total number of events that are older than the
+              events shown in compressed and normal view.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Interactions</h4>
+
+            <p>
+              If you left-click on a block, the block will get a blue border indicating that you have selected it as an
+              anomaly.
+            </p>
+
+            <img src="images/version_2_instruction_left_click.png" alt="version_2_instruction_left_click" class="w" />
+
+            <p>
+              If you right-click on a selected anomaly, the border of the block will be removed indicating that you have
+              de-selected it as an anomaly. This could be useful if you have selected a block by accident or if you
+              changed your decision.
+            </p>
+
+            <img src="images/version_2_instruction_right_click.png" alt="version_2_instruction_right_click" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomaly Detection</h4>
+
+
+            <p>
+              An anomaly detector highlights potential anomalies by coloring
+              the border of the event red. This algorithm is not perfect and
+              can miss specific anomalies or misjudge and label normal events
+              as anomalies. Be aware that you keep an eye on the unmarked events as well to detect anomalies.
+            </p>
+
+            <p>
+              Your interaction with the visualization will influence the
+              sensitivity of the algorithm per sequence.
+            </p>
+
+            <img src="images/version_4_anomaly_detector.png" alt="version_4_anomaly_detector" class="w mx-auto" />
+
+            <p>
+            <p>
+              You can agree with the algorithm and left-click on the
+              highlighted event to confirm the detection of an anomaly. The border color will change to blue.
+            </p>
+            </p>
+
+            <img src="images/version_4_detector_agree_red.png" alt="version_4_detector_agree_red" class="w mx-auto" />
+
+            <img src="images/version_4_detector_agree_blue.png" alt="version_4_detector_agree_blue" class="w mx-auto" />
+
+            <p>
+              You can disagree with the algorithm and right-click the
+              highlighted event to un-mark the event, it is not registered as
+              an anomaly.
+            </p>
+
+            <img src="images/version_4_detector_disagree_red.png" alt="version_4_detector_disagree_red"
+              class="w mx-auto" />
+
+            <img src="images/version_4_detector_disagree_no_border.png" alt="version_4_detector_disagree_no_border"
+              class="w mx-auto" />
+
+            <p>
+              It is important that you interact (agree/disagree) with the visualization to adjust the sensitivity of the
+              algorithm. If you do not interact with a
+              highlighted event, and it leaves the screen with a red border, the event is considered a normal event and
+              not flagged anomalous.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+
+            <h4 class="font-bold mt-5 mb-2 text-lg">Anomalies</h4>
+
+            <p>
+              Anomalies (deviations or 'afwijkingen' in Dutch) are present in almost all streaming sequences that you will
+              evaluate.
+              It is your task to detect these anomalies by clicking on the anomalous block.
+            </p>
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              <i>Anomalies are single events that deviate in color from the contextual repetitive pattern.</i>
+            </p>
+            <p>
+              <i>Anomalous blocks replace the expected colored blocks in the sequence.</i>
+            </p>
+
+            <p>
+              <i>In case a pattern is changing, the first new block of a changing pattern is <b>not</b> considered an
+                anomaly.</i>
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              Examples of anomalies are given below:
+            </p>
+            <p>
+              <i>Short pattern anomaly:</i>
+            </p>
+            <img src="images/short_anomaly.png" alt="Short_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Long pattern anomaly:</i>
+            </p>
+            <img src="images/long_anomaly.png" alt="Long_pattern_anomaly" class="w" />
+
+            <p>
+              <i>Changing pattern anomaly:</i>
+            </p>
+            <img src="images/change_anomaly.png" alt="Changing_pattern_anomaly" class="w" />
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <h3 class="font-bold mt-5 mb-2 text-lg">Summary</h3>
+
+            <p>
+              Click on the blocks that deviate in color or from the contextual repetitive pattern for that sequence
+              (row).
+              Whether you consider an event anomalous only depends on the pattern of the corresponding sequences
+              (row).
+              The first block of a changing pattern is <b>not</b> considered an anomaly.
+            </p>
+
+            <p>
+              Interact with the visualization to adjust the sensitivity of the algorithm. This algorithm is not perfect
+              and
+              can miss specific anomalies or misjudge and label normal events as anomalies. Be aware that you keep an
+              eye on the unmarked events as well to detect anomalies.
+            </p>
+
+            <div class="my-5 py-5">
+              <hr />
+            </div>
+
+            <p>
+              This session will take 3 minutes and your task is to detect
+              anomalies as <b>quickly</b> and <b>accurately</b> as possible.
+            </p>
+
+            <p>
+              The session will start when you click the button below. Good
+              luck!
+          </div>
+          <div class="my-5 py-5">
+            <hr />
+          </div>
+          <button type="submit" value="Submit" class="bg-indigo-400 hover:bg-indigo-600 rounded px-3 py-2 text-white">
+            Start session
+          </button>
+        </form>
+      </div>
+      <div class="my-5 p-5">
+        <!-- gray text the cookie contents of cookie 'session' -->
+        <p class="text-gray-300 break-all monospace">
+          <!-- cookie contents of cookie 'session' -->
+          Cookie:
+          <span class="w-full break-all text-gray-300" id="cookie"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
